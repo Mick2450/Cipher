@@ -1,7 +1,29 @@
 #include <stdio.h>
 
-int main(void){
+char encryptRot(void);
 
+int main(void){
+    int UI = 0;
+    
+    printf("All input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message: ");
+    scanf("%d", &UI);
+    
+    switch(UI){
+        case 1:
+        printf("\nRunning rotation encryption\n");
+        encryptRot();
+        break;
+        
+        default:
+        printf("Invalid selection, please enter between 1 & 4\n" );
+        break;
+          
+    }    
+
+return 0;
+}
+
+char encryptRot(void){
     char c, eN; //c is character from message & eN is is the encrypted character
     int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
     int eLibL[] = {97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122}; //library of encryption values from a to z
