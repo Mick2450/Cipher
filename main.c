@@ -5,7 +5,7 @@ int main(void){
     char c, eN; //c is character from message & eN is is the encrypted character
     int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
     int eLibL[] = {97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122}; //library of encryption values from a to z
-    int asc[1024]; //ascii upper case array
+    int asc[1024]; //ascii array
     int i = 0, e;
     int k = 5;  //key
     
@@ -26,7 +26,7 @@ int main(void){
      /*while loop that scans input file for characters, prints them, encrypts, writes to an output, and loops until no characters are left in the input file*/   
     while(!feof(input)){ //loops until no characters are left in the input file
         fscanf(input,"%c", &c); //Scans file for characters and stores them as a variable c
-         i++;
+         i++; //increments array pointer with every loop and assigns the input read ascii value to it, i.e. asc[0] = "first input character read from file"
         
         if(c >= 65 && c <= 90){  //if upper case
             
