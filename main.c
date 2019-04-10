@@ -7,7 +7,7 @@ int main(void){
     int eLibL[] = {97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122}; //library of encryption values from a to z
     int asc[1024]; //ascii array
     int i = 0, e;
-    int k = 5;  //key
+    int k = 12;  //key
     
     /*Open message file and output file*/
     FILE *input, *output;        //File points to input and output
@@ -23,7 +23,8 @@ int main(void){
     return 0;
     }
     
-     /*while loop that scans input file for characters, prints them, encrypts, writes to an output, and loops until no characters are left in the input file*/   
+     /*while loop scans input file for characters, prints them to terminal, 
+     encrypts them with key value, writes this to an output, and loops until no characters are left in the input file*/   
     while(!feof(input)){ //loops until no characters are left in the input file
         fscanf(input,"%c", &c); //Scans file for characters and stores them as a variable c
          i++; //increments array pointer with every loop and assigns the input read ascii value to it, i.e. asc[0] = "first input character read from file"
@@ -33,7 +34,7 @@ int main(void){
             asc[i] = c;     //assigns array at array point i with value c
             c = c - 65;     //A = 0
             e = c + k;  //encryption algorithm 
-            if(e > 26){     //if array pointer value is exceeded
+            if(e >= 26){     //if array pointer value is exceeded
                 e = e - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
               }
              eN = eLibU[e]; //selects encrypted value from upper case array
@@ -44,7 +45,7 @@ int main(void){
             asc[i] = c;     //assigns array at array point i with value c
             c = c - 97;     //a = 0
             e = c + k;  //encryption algorithm 
-            if(e > 26){     //if array pointer value is exceeded
+            if(e >= 26){     //if array pointer value is exceeded
                 e = e - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
               }
              eN = eLibL[e]; //selects encrypted value from upper case array
