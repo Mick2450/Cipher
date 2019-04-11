@@ -79,6 +79,21 @@ char encryptRot(int k){
              eN = eLibL[e]; //selects encrypted value from upper case array
         }   
 
+        /*The following 3 'else if' statements leave common punctuation unmodified*/
+        else if(c == 46){ //if full stop
+            asc[i] = 46;  //sets ASCII value full stop
+            eN = 46;  //sets ASCII value to full stop
+        }
+        
+         else if(c == 44){ //if comma
+            asc[i] = 44;  //sets ASCII value to comma
+            eN = 44;  //sets ASCII value to comma
+        }
+        
+        else if(c == 39){ //if apostrophe 
+            asc[i] = 39;  //sets ASCII value to apostrophe
+            eN = 39;  //sets ASCII value to apostrophe
+        }  
                
         else if(c < 65 || (c >= 91 && c <= 96) || c > 122 ){ //excludes any ASCII value that isn't a letter
            
