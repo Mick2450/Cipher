@@ -1,21 +1,24 @@
 #include <stdio.h>
 
-char encryptRot(void);
+char encryptRot(int k);
 
 int main(void){
     int UI = 0;
+    int k = 0; //key
     
-    printf("All input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message: ");
+    printf("\nAll input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message: ");
     scanf("%d", &UI);
     
     switch(UI){
         case 1:
-        printf("\nRunning rotation encryption\n");
-        encryptRot();
+        printf("\nRunning rotation encryption\nEnter rotation key: ");
+        scanf("%d", &k);
+        encryptRot(k);
         break;
         
         default:
         printf("Invalid selection, please enter between 1 & 4\n" );
+        
         break;
           
     }    
@@ -23,13 +26,13 @@ int main(void){
 return 0;
 }
 
-char encryptRot(void){
+char encryptRot(int k){
     char c, eN; //c is character from message & eN is is the encrypted character
     int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
     int eLibL[] = {97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122}; //library of encryption values from a to z
     int asc[1024]; //ascii array
     int i = 0, e;
-    int k = 12;  //key
+    
     
     /*Open message file and output file*/
     FILE *input, *output;        //File points to input and output
@@ -44,6 +47,9 @@ char encryptRot(void){
         perror("fopen()");
     return 0;
     }
+    
+    fprintf(output, "%s %s %d\n", "Key", "is", k); //prints key value to output
+    fprintf(output, "%s %s\n", "Encrypted", "Message: "); //prints message before encrypted text
     
      /*while loop scans input file for characters, prints them to terminal, 
      encrypts them with key value, writes this to an output, and loops until no characters are left in the input file*/   
@@ -83,9 +89,9 @@ char encryptRot(void){
         printf("%c %d encrypted: %d %c\n", asc[i], asc[i], eN, eN);
         
         fputc(eN, output); //prints encrypted message to output file
-        i++;
+        
     }
-    
+        
     fclose(input); //closes input file
     fclose(output);
     
