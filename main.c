@@ -1,23 +1,36 @@
 #include <stdio.h>
 
-char encryptRot(int k);
+char cipherRot(int k, int flag);
 
 int main(void){
     int UI = 0;
     int k = 0; //key
-    
-    printf("\nAll input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message: ");
+    int flag = 0; //flag for encryption or decrpytion, used for introduction message printed in output file. 
+       
+    /*User interface: menu of options to run switch case function*/
+    printf("\nAll input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message, enter '2' for rotation decryption of a cipher: ");
     scanf("%d", &UI);
     
+    /*User interface: calls encryption/decryption functions based on a list of options and user input*/
     switch(UI){
+        //Call Rotation Encryption
         case 1:
-        printf("\nRunning rotation encryption\nEnter rotation key: ");
-        scanf("%d", &k);
-        encryptRot(k);
+        printf("\nRunning rotation encryption\nEnter rotation key: "); //allows for user input of desired rotation key
+        scanf("%d", &k); 
+        flag = 0;
+        cipherRot(k, flag);
+        break;
+        
+        //Call Rotation Decryption
+        case 2:
+        printf("\nRunning rotation decryption\nEnter rotation key: "); //allows for user input of desired rotation key
+        scanf("%d", &k); 
+        flag = 1;
+        cipherRot(k, flag);
         break;
         
         default:
-        printf("Invalid selection, please enter between 1 & 4\n" );
+        printf("\nInvalid selection, please enter between 1 & 4" );
         
         break;
           
@@ -26,7 +39,8 @@ int main(void){
 return 0;
 }
 
-char encryptRot(int k){
+/*Rotation encryption funciton definition*/
+char cipherRot(int k, int flag){
     char c, eN; //c is character from message & eN is is the encrypted character
     int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
     int eLibL[] = {97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122}; //library of encryption values from a to z
@@ -48,8 +62,19 @@ char encryptRot(int k){
     return 0;
     }
     
-    fprintf(output, "%s %s %d\n", "Key", "is", k); //prints key value to output
-    fprintf(output, "%s %s\n", "Encrypted", "Message: "); //prints message before encrypted text
+    /*if & if else functions print text to output file for either an encryption or decryption senario based on the flag declared in switch case UI selection*/
+    if(flag = 0){
+        fprintf(output, "%s %s %d\n", "Key", "is:", k); //prints key value to output
+        fprintf(output, "%s %s\n", "Encrypted", "Message: "); //prints message before encrypted text
+    }
+    else if(flag = 1){
+        fprintf(output, "%s %s %d\n", "Key", "used:", k); //prints key value to output
+        fprintf(output, "%s %s\n", "Decrypted", "Message: "); //prints message before encrypted text   
+    }
+
+
+
+    
     
      /*while loop scans input file for characters, prints them to terminal, 
      encrypts them with key value, writes this to an output, and loops until no characters are left in the input file*/   
@@ -94,6 +119,10 @@ char encryptRot(int k){
             asc[i] = 39;  //sets ASCII value to apostrophe
             eN = 39;  //sets ASCII value to apostrophe
         }  
+          else if(c == 58){ //if colon
+            asc[i] = 58;  //sets ASCII value to colon
+            eN = 58;  //sets ASCII value to colon
+        }  
                
         else if(c < 65 || (c >= 91 && c <= 96) || c > 122 ){ //excludes any ASCII value that isn't a letter
            
@@ -113,3 +142,4 @@ char encryptRot(int k){
    return 0; 
 
 }
+
