@@ -1,18 +1,26 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 char cipherRot(int k, int flag); //rotation cipher function prototype
-char cipherSub(int flag, char userKey[26]);
+char cipherSub(void);
+char cipherSubEncrpytRand(void);
+char cipherSubEncrpytUserIn(int key[]);
 
 
 int main(void){
     int UI = 0;
     int k = 0, i = 0; //rotation key
     int flag = 0; //flag for encryption or decrpytion, used for introduction message printed in output file.
-    char userKey[26] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90};
+    int key[26];
+    char userKeyIn[26];
+
+ 
+    
        
     /*User interface: menu of options to run switch case function*/
-    printf("\nAll input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message, enter '2' for rotation decryption of a cipher, enter '3' for substitution decryption of cipher,  enter '4' for substitution encryption of cipher: ");
+    printf("\nAll input should be entered into 'input.txt' & all output will be sent to 'output.txt'\nEnter '1' for rotation encryption of a message, enter '2' for rotation decryption of a cipher, enter '3' for statistical substitution decryption of cipher,  enter '4' for substitution encryption of cipher: ");
     scanf("%d", &UI);
     
     /*User interface: calls encryption/decryption functions based on a list of options and user input*/
@@ -37,22 +45,27 @@ int main(void){
         case 3:
         printf("\nRunning substitution decryption"); 
         flag = 0;
-        cipherSub(flag, userKey);
+        cipherSub();
         break;
-        
-        //Call Substitution Encryption
-        case 4:
-        printf("\nRunning substitution decryption\n");
-        for(i = 0; i <= 25; i++){
-           
-           printf("Enter rotation key to correspond with alphabetical order (enter '0' to stop entering key): ");
-           while(scanf("%d") != 0){ //trying to add exit ability
-                scanf("%c", &userKey[i]); 
-            }
-        }
     
-        flag = 1;
-        cipherSub(flag, userKey);
+        //Call Substitution encryption    
+        case 4:
+        printf("\nRunning substitution encryption\nEnter '1' for random key generation and '2' for user input key: "); 
+        scanf("%d", &flag); 
+        if(flag == 1){ //random key
+         
+            cipherSubEncrpytRand();
+        }    
+
+        else if(flag == 2){ //user input key
+            flag == 2;
+            printf("\nEnter key of 26 subsitution letters in sequential subsitution order: "); 
+            for(i=0; i <= 25; i++){
+                scanf("%c", &userKeyIn[i]); 
+                key[i] = userKeyIn[i];
+            } 
+            cipherSubEncrpytUserIn(key);
+        }
         break;
         
         default:
@@ -168,9 +181,11 @@ char cipherRot(int k, int flag){
 /*----------------END of Rotation encryption/decryption function definition ------------------*/
 
 
-/*----------------START of Subsitution encryption/decryption function definition ------------------*/
-char cipherSub(int flag, char userKey[26]){
-        char c = 0, eN = 0, eNFinal = 0; //c is character from message & eN is is the encrypted character
+
+/*----------------START of STATISTICAL subsitution decryption function definition ------------------*/
+//Decryption of input text based on statistical analysis
+char cipherSub(void){
+char c, eN, eNFinal; //c is character from message & eN is is the encrypted character
     int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
     int asc[1024] = {0}; //ascii array
     int i = 0, e = 0, count = 0, j = 0;
@@ -321,10 +336,9 @@ char cipherSub(int flag, char userKey[26]){
     //printf("\n%c\n", array[22]); //array[0] is the most commonly occuring letter, can test if array is working here
  /*------------------------------------------------------------------------*/
 
- /*-----Creation of key for each alphabet by comparing frequency of input text character occurrence with frequency of character occurrence in the english language------------------*/
-    if(flag = 0){
-       
-    for(i=0; i<strlen(array); i++){
+ /*-----Creation of key for each letter of the alphabet by comparing frequency of input text 
+ character occurrence with frequency of character occurrence in the english language------------------*/
+    for(i=0; i<strlen(array); i++){ 
         if(freq[i] != 0 && array[i] >=65 && array[i] <=90){
         
         arr = array[i];
@@ -338,12 +352,6 @@ char cipherSub(int flag, char userKey[26]){
         printf("\n%c is rotated %d", arr, key[location]); //prints key based on statistical analysis
         }
     }
-}   
-    if(flag = 1){
-        key[26] = userKey[26];
-        
-    }
-
  /*------------------------------------------------------------------------*/
   
 /*--------------Decryption/Encryption of input Based on statistical analysis------------------*/
@@ -389,4 +397,323 @@ char cipherSub(int flag, char userKey[26]){
     return 0;     
 }
    
-/*----------------END of Subsitution encryption/decryption function definition ------------------*/
+/*----------------END of STATISTICAL subsitution decryption function definition ------------------*/
+
+
+
+/*----------------START of subsitution encryption function definition with random generated key ------------------*/
+char cipherSubEncrpytRand(void){
+    char c, eN, eNFinal; //c is character from message & eN is is the encrypted character
+    int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
+    int asc[1024] = {0}; //ascii array
+    int i = 0, e = 0;
+    char array[1024] = {0};
+    int encrypted[1024] = {0}; // array used to store encrypted message
+    int k = 0, location = 0;
+    char original[1024] = {0}; // array used to store original input characters after ithey have been read by while loop below
+    int userKey[26]; //user key for encryption 
+    
+      
+    /*Open message file and output file*/
+    FILE *input, *output;        //File points to input and output
+    input = fopen("input.txt", "r");   //open file name and read format
+    output = fopen("output.txt", "w");
+    
+    if(input == NULL) {         //Error message incase input file directory not found
+        perror("fopen()");
+    return 0;
+    }
+    if(output == NULL) {         //Error message incase output file directory not found
+        perror("fopen()");
+    return 0;
+    }
+    
+   
+        
+     /*----while loop scans input file for characters, prints them to terminal, 
+     encrypts them with key value, writes this to an output, and loops until no characters are left in the input file*/   
+     while(!feof(input)){ //loops until no characters are left in the input file
+        fscanf(input,"%c", &c); //Scans file for characters and stores them as a variable c
+         i++; //increments array pointer with every loop and assigns the input read ascii value to it, i.e. asc[0] = "first input character read from file"
+       
+       if(c >= 65 && c <= 90){  //if upper case
+            
+            asc[i] = c;     //assigns array at array point i with value c
+            c = c - 65;     //A = 0
+            e = c; //encryption algorithm 
+            if(e >= 26){     //if array pointer value is exceeded
+                e = e - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
+              }
+             eN = eLibU[e]; //selects encrypted value from upper case array
+             array[i] = eN;
+        }  
+        
+        else if(c >= 97 && c <= 122){  //if lower case 
+            
+            asc[i] = c;     //assigns array at array point i with value c
+            c = c - 32;     //a = 0
+            e = c - 65; //encryption algorithm 
+            if(e >= 26){     //if array pointer value is exceeded
+                e = e - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
+              }
+             eN = eLibU[e]; //selects ascii value from upper case array
+             array[i] = eN; //stores selected ascii value in an array
+        }   
+
+        /*The following 3 'else if' statements leave common punctuation unmodified*/
+        else if(c == 46){ //if full stop
+            asc[i] = 46;  //sets ASCII value full stop
+            eN = 46;  //sets ASCII value to full stop
+        }
+        else if(c == 63){ //if question mark
+            asc[i] = 63;  //sets ASCII value full stop
+            eN = 63;  //sets ASCII value to full stop
+   }
+
+        
+         else if(c == 44){ //if comma
+            asc[i] = 44;  //sets ASCII value to comma
+            eN = 44;  //sets ASCII value to comma
+        }
+        
+        else if(c == 39){ //if apostrophe 
+            asc[i] = 39;  //sets ASCII value to apostrophe
+            eN = 39;  //sets ASCII value to apostrophe
+        }  
+          else if(c == 58){ //if colon
+            asc[i] = 58;  //sets ASCII value to colon
+            eN = 58;  //sets ASCII value to colon
+        }  
+                       
+        else if(c < 65 || (c >= 91 && c <= 96) || c > 122 ){ //excludes any ASCII value that isn't a letter
+           
+            asc[i] = 32;  //sets ASCII value to space
+            eN = 32;  //sets ASCII value to space
+            
+        }   
+        original[i-1] = eN;
+    
+    }
+/*----------------------------END of input reading while loop----------------------*/
+
+
+ /*-----Creation of key for each letter of the alphabet ------------------*/
+    srand(time(0)); 
+    fprintf(output, "%s %s", "Key", "is:");
+    for(i=0; i<= 25; i++){ 
+        userKey[i] = rand() % 27; // random key between 0 and 26 generated
+        k = userKey[i];
+        encrypted[i] = eLibU[i] + k;
+        e = encrypted[i];
+        if(e > 90){     //if ascii value Z is exceeded...
+            e = e - 25;    //starts array value from A     
+        }
+        fprintf(output, " %c", e); //prints key value to output
+    }
+    fprintf(output, "\n"); // creates space between key value and encrypted message text in output file, just for aesthetics
+ /*------------------------------------------------------------------------*/
+  
+/*--------------Encryption of input based on randomly generated key (i.e. userKey)------------------*/
+
+    for(i=0; i<strlen(original); i++){
+            
+            location = original[i] - 65;
+            k = userKey[location];
+            encrypted[i] = original[i] + k;
+            e = encrypted[i]; 
+            if(e > 90){     //if ascii value Z is exceeded...
+                e = e - 25;    //starts array value from A     
+              }
+             if(original[i] == 44){
+                  e = 44;
+              }
+              
+              if(original[i] == 32){
+                  e = 32;
+              }
+              if(original[i] == 39){
+                  e = 39;
+              }
+               if(original[i] == 46){
+                  e = 46;
+              }
+                if(original[i] == 63){
+                  e = 63;
+              }
+             
+            eNFinal = e;
+            
+       
+            printf("\n%c (%d) is %c (%d)", original[i], original[i], eNFinal, eNFinal);
+            fputc(eNFinal, output); //prints encrypted message to output file
+   
+    }   
+ /*------------------------------------------------------------------------*/
+        
+    fclose(input); //closes input file
+    fclose(output); //closes output file
+    
+    return 0;     
+}  
+
+/*----------------END function definition ------------------*/
+
+
+/*----------------START of subsitution encryption function definition with user input key ------------------*/
+char cipherSubEncrpytUserIn(int key[]){
+    char c, eN, eNFinal; //c is character from message & eN is is the encrypted character
+    int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
+    int asc[1024] = {0}; //ascii array
+    int i = 0, e = 0;
+    char array[1024] = {0};
+    int encrypted[1024] = {0}; // array used to store encrypted message
+    int k = 0, location = 0;
+    char original[1024] = {0}; // array used to store original input characters after ithey have been read by while loop below
+    int userKey[26]; //user key for encryption 
+    
+      
+    /*Open message file and output file*/
+    FILE *input, *output;        //File points to input and output
+    input = fopen("input.txt", "r");   //open file name and read format
+    output = fopen("output.txt", "w");
+    
+    if(input == NULL) {         //Error message incase input file directory not found
+        perror("fopen()");
+    return 0;
+    }
+    if(output == NULL) {         //Error message incase output file directory not found
+        perror("fopen()");
+    return 0;
+    }
+    
+   
+        
+     /*----while loop scans input file for characters, prints them to terminal, 
+     encrypts them with key value, writes this to an output, and loops until no characters are left in the input file*/   
+     while(!feof(input)){ //loops until no characters are left in the input file
+        fscanf(input,"%c", &c); //Scans file for characters and stores them as a variable c
+         i++; //increments array pointer with every loop and assigns the input read ascii value to it, i.e. asc[0] = "first input character read from file"
+       
+       if(c >= 65 && c <= 90){  //if upper case
+            
+            asc[i] = c;     //assigns array at array point i with value c
+            c = c - 65;     //A = 0
+            e = c; //encryption algorithm 
+            if(e >= 26){     //if array pointer value is exceeded
+                e = e - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
+              }
+             eN = eLibU[e]; //selects encrypted value from upper case array
+             array[i] = eN;
+        }  
+        
+        else if(c >= 97 && c <= 122){  //if lower case 
+            
+            asc[i] = c;     //assigns array at array point i with value c
+            c = c - 32;     //a = 0
+            e = c - 65; //encryption algorithm 
+            if(e >= 26){     //if array pointer value is exceeded
+                e = e - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
+              }
+             eN = eLibU[e]; //selects ascii value from upper case array
+             array[i] = eN; //stores selected ascii value in an array
+        }   
+
+        /*The following 3 'else if' statements leave common punctuation unmodified*/
+        else if(c == 46){ //if full stop
+            asc[i] = 46;  //sets ASCII value full stop
+            eN = 46;  //sets ASCII value to full stop
+        }
+        else if(c == 63){ //if question mark
+            asc[i] = 63;  //sets ASCII value full stop
+            eN = 63;  //sets ASCII value to full stop
+   }
+
+        
+         else if(c == 44){ //if comma
+            asc[i] = 44;  //sets ASCII value to comma
+            eN = 44;  //sets ASCII value to comma
+        }
+        
+        else if(c == 39){ //if apostrophe 
+            asc[i] = 39;  //sets ASCII value to apostrophe
+            eN = 39;  //sets ASCII value to apostrophe
+        }  
+          else if(c == 58){ //if colon
+            asc[i] = 58;  //sets ASCII value to colon
+            eN = 58;  //sets ASCII value to colon
+        }  
+                       
+        else if(c < 65 || (c >= 91 && c <= 96) || c > 122 ){ //excludes any ASCII value that isn't a letter
+           
+            asc[i] = 32;  //sets ASCII value to space
+            eN = 32;  //sets ASCII value to space
+            
+        }   
+        original[i-1] = eN;
+    
+    }
+/*----------------------------END of input reading while loop----------------------*/
+
+
+ /*-----Creation of key for each letter of the alphabet ------------------*/
+    srand(time(0)); 
+    fprintf(output, "%s %s", "Key", "is:");
+    for(i=0; i<= 25; i++){ 
+        k = key[i];
+        encrypted[i] = eLibU[i] + k;
+        e = encrypted[i];
+        if(e > 90){     //if ascii value Z is exceeded...
+            e = e - 25;    //starts array value from A     
+        }
+        fprintf(output, " %c", e); //prints key value to output
+    }
+    fprintf(output, "\n"); // creates space between key value and encrypted message text in output file, just for aesthetics
+ /*------------------------------------------------------------------------*/
+  
+/*--------------Encryption of input based on randomly generated key (i.e. userKey)------------------*/
+
+    for(i=0; i<strlen(original); i++){
+            
+            location = original[i] - 65;
+            k = key[location];
+            encrypted[i] = original[i] + k;
+            e = encrypted[i]; 
+            if(e > 90){     //if ascii value Z is exceeded...
+                e = e - 25;    //starts array value from A     
+              }
+             if(original[i] == 44){
+                  e = 44;
+              }
+              
+              if(original[i] == 32){
+                  e = 32;
+              }
+              if(original[i] == 39){
+                  e = 39;
+              }
+               if(original[i] == 46){
+                  e = 46;
+              }
+                if(original[i] == 63){
+                  e = 63;
+              }
+             
+            eNFinal = e;
+            
+       
+            printf("\n%c (%d) is %c (%d)", original[i], original[i], eNFinal, eNFinal);
+            fputc(eNFinal, output); //prints encrypted message to output file
+   
+    }   
+ /*------------------------------------------------------------------------*/
+        
+    fclose(input); //closes input file
+    fclose(output); //closes output file
+    
+    return 0;     
+}    
+    
+
+
+
+/*----------------END function definition ------------------*/
