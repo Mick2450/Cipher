@@ -41,31 +41,38 @@ int main(void){
         cipherRot(k, flag);
         break;
         
-        //Call Substitution Decryption
+        //Call substitution decryption
         case 3:
         printf("\nRunning substitution decryption"); 
         flag = 0;
         cipherSub();
         break;
     
-        //Call Substitution encryption    
+        //Call substitution encryption and decrpytion based on user selection    
         case 4:
-        printf("\nRunning substitution encryption\nEnter '1' for random key generation and '2' for user input key: "); 
+        printf("\nRunning substitution encryption\nEnter '1' for random key generation or enter '2' for user input key: "); 
         scanf("%d", &flag); 
-        if(flag == 1){ //random key
-         
+        
+        if(flag == 1){ //random key generated
             cipherSubEncrpytRand();
         }    
 
-        else if(flag == 2){ //user input key
-            flag == 2;
-            printf("\nEnter key of 26 subsitution letters in sequential subsitution order: "); 
+        else if(flag == 2){ //user input key used for encryption 
+            printf("\nEnter key of 26 UPPER CASE letters in sequential subsitution order, then hit ENTER key: "); 
             for(i=0; i <= 25; i++){
                 scanf("%c", &userKeyIn[i]); 
                 key[i] = userKeyIn[i];
             } 
             cipherSubEncrpytUserIn(key);
         }
+        /*if(flag == 3){ //user input key used for encryption 
+            printf("\nEnter key of 26 UPPER CASE letters in sequential subsitution order, then hit ENTER key: "); 
+            for(i=0; i <= 25; i++){
+                scanf("%c", &userKeyIn[i]); 
+                key[i] = userKeyIn[i];
+            } 
+            cipherSubEncrpytUserIn(key);
+        }*/
         break;
         
         default:
@@ -185,7 +192,7 @@ char cipherRot(int k, int flag){
 /*----------------START of STATISTICAL subsitution decryption function definition ------------------*/
 //Decryption of input text based on statistical analysis
 char cipherSub(void){
-char c, eN, eNFinal; //c is character from message & eN is is the encrypted character
+    char c, eN, eNFinal; //c is character from message & eN is is the encrypted character
     int eLibU[] = {65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90}; //library of encryption values from A to Z
     int asc[1024] = {0}; //ascii array
     int i = 0, e = 0, count = 0, j = 0;
@@ -362,7 +369,7 @@ char c, eN, eNFinal; //c is character from message & eN is is the encrypted char
             decrypted[i] = original[i] + k;
             e = decrypted[i];         
             
-             if(e >= 90){     //if array pointer value is exceeded
+             if(e > 90){     //if array pointer value is exceeded
                 e = e - 65;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
               }
                if(original[i] == 44){
@@ -559,6 +566,7 @@ char cipherSubEncrpytRand(void){
 /*----------------END function definition ------------------*/
 
 
+
 /*----------------START of subsitution encryption function definition with user input key ------------------*/
 char cipherSubEncrpytUserIn(int key[]){
     char c, eN, eNFinal; //c is character from message & eN is is the encrypted character
@@ -567,8 +575,8 @@ char cipherSubEncrpytUserIn(int key[]){
     int i = 0, e = 0;
     char array[1024] = {0};
     int encrypted[1024] = {0}; // array used to store encrypted message
-    int k = 0, location = 0;
-    char original[1024] = {0}; // array used to store original input characters after ithey have been read by while loop below
+    int k = 0, arr = 0, alph = 0, location = 0, keyF[26];
+    char original[1024]; // array used to store original input characters after they have been read by while loop below
     int userKey[26]; //user key for encryption 
     
       
@@ -649,39 +657,40 @@ char cipherSubEncrpytUserIn(int key[]){
             eN = 32;  //sets ASCII value to space
             
         }   
-        original[i-1] = eN;
+        original[i - 1] = eN;
     
     }
 /*----------------------------END of input reading while loop----------------------*/
 
 
  /*-----Creation of key for each letter of the alphabet ------------------*/
-    srand(time(0)); 
-    fprintf(output, "%s %s", "Key", "is:");
-    for(i=0; i<= 25; i++){ 
-        k = key[i];
-        encrypted[i] = eLibU[i] + k;
-        e = encrypted[i];
-        if(e > 90){     //if ascii value Z is exceeded...
-            e = e - 25;    //starts array value from A     
+
+   for(i=0; i <= 25; i++){ 
+              
+        arr = key[i];
+        alph = eLibU[i];
+        location = arr - 65;
+        
+        key[location] = alph - arr;
+        if(key[location] >= 26){     //if array pointer value is exceeded
+            key[location] = key[location] - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
         }
-        fprintf(output, " %c", e); //prints key value to output
     }
-    fprintf(output, "\n"); // creates space between key value and encrypted message text in output file, just for aesthetics
+    
  /*------------------------------------------------------------------------*/
   
-/*--------------Encryption of input based on randomly generated key (i.e. userKey)------------------*/
-
+/*--------------Decryption/Encryption of input text by user key------------------*/
     for(i=0; i<strlen(original); i++){
             
             location = original[i] - 65;
             k = key[location];
             encrypted[i] = original[i] + k;
-            e = encrypted[i]; 
-            if(e > 90){     //if ascii value Z is exceeded...
-                e = e - 25;    //starts array value from A     
+            e = encrypted[i];         
+            
+             if(e > 90){     //if array pointer value is exceeded
+                e = e - 65;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
               }
-             if(original[i] == 44){
+               if(original[i] == 44){
                   e = 44;
               }
               
@@ -712,8 +721,4 @@ char cipherSubEncrpytUserIn(int key[]){
     
     return 0;     
 }    
-    
-
-
-
 /*----------------END function definition ------------------*/
