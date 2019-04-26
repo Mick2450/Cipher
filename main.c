@@ -672,7 +672,7 @@ char cipherSubEncrpytUserIn(int key[]){
         location = arr - 65;
         
         key[location] = alph - arr;
-        if(key[location] >= 26){     //if array pointer value is exceeded
+        if(key[location] > 26){     //if array pointer value is exceeded
             key[location] = key[location] - 26;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
         }
     }
@@ -687,7 +687,7 @@ char cipherSubEncrpytUserIn(int key[]){
             encrypted[i] = original[i] + k;
             e = encrypted[i];         
             
-             if(e > 90){     //if array pointer value is exceeded
+             if(e >= 90){     //if array pointer value is exceeded
                 e = e - 65;    //starts array pointers over again plus difference between total value (>26) and max pointer value (26)    
               }
                if(original[i] == 44){
@@ -707,7 +707,7 @@ char cipherSubEncrpytUserIn(int key[]){
                   e = 63;
               }
              
-            eNFinal = e;
+            eNFinal = e - 1;
             
        
             printf("\n%c (%d) is %c (%d)", original[i], original[i], eNFinal, eNFinal);
