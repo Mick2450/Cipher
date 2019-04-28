@@ -111,11 +111,11 @@ char cipherRot(int k, int flag){
     }
     
     /*if & if else functions print text to output file for either an encryption or decryption senario based on the flag declared in switch case UI selection*/
-    if(flag = 0){
+    if(flag == 0){
         fprintf(output, "%s %s %d\n", "Key", "is:", k); //prints key value to output
         fprintf(output, "%s %s\n", "Encrypted", "Message: "); //prints message before encrypted text
     }
-    else if(flag = 1){
+    else if(flag == 1){
         fprintf(output, "%s %s %d\n", "Key", "used:", k); //prints key value to output
         fprintf(output, "%s %s\n", "Decrypted", "Message: "); //prints message before encrypted text   
     }  
